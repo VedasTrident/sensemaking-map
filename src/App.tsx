@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FileUpload from './components/FileUpload';
 import SensemakingMap from './components/SensemakingMap';
 import { DocumentProcessor, ProcessedDocument } from './services/documentProcessor';
-import { ContentAnalyzer, ExtractedNode, AnalysisResult } from './services/contentAnalyzer';
+import { SmartContentAnalyzer, ExtractedNode, AnalysisResult } from './services/smartContentAnalyzer';
 import { ExportService } from './services/exportService';
 import { Download, FileText, Map, Settings } from 'lucide-react';
 import './App.css';
@@ -17,7 +17,7 @@ function App() {
   const [error, setError] = useState<string>('');
 
   const documentProcessor = new DocumentProcessor();
-  const contentAnalyzer = new ContentAnalyzer();
+  const contentAnalyzer = new SmartContentAnalyzer();
   const exportService = new ExportService();
 
   const handleFilesUploaded = async (files: File[]) => {
@@ -116,70 +116,83 @@ function App() {
       // Create sample documents with realistic career content
       const sampleDocuments: ProcessedDocument[] = [
         {
-          fileName: 'resume.pdf',
-          content: `John Smith
-Software Engineer | Full Stack Developer
+          fileName: 'linkedin_profile.txt',
+          content: `Ved Shankar
+Product Manager at Meta | Former Consultant at McKinsey & Company
 
 EXPERIENCE
-Software Engineer at TechCorp (2022-2024)
-- Developed React applications using JavaScript and TypeScript
-- Built REST APIs with Node.js and Express
-- Implemented database solutions with PostgreSQL
-- Led a team of 3 developers on mobile app project
-- Deployed applications using Docker and AWS
 
-Junior Developer at StartupXYZ (2020-2022)  
-- Created responsive web applications using HTML, CSS, React
-- Worked on machine learning models with Python and TensorFlow
-- Collaborated with UX designers on user interface improvements
-- Managed project timelines using Agile methodology
+Product Manager at Meta (2023 - Present)
+• Led product strategy for Instagram Reels monetization features
+• Collaborated with engineering teams to launch creator economy tools
+• Analyzed user engagement data to optimize content discovery algorithms
+• Managed cross-functional teams of 15+ engineers and designers
+
+Senior Consultant at McKinsey & Company (2021 - 2023)
+• Advised Fortune 500 clients on digital transformation strategies
+• Led due diligence for $2B+ technology acquisitions
+• Developed go-to-market strategies for SaaS startups
+• Presented findings to C-suite executives and board members
+
+Business Analyst at Boston Consulting Group (2019 - 2021)
+• Conducted market research and competitive analysis for tech clients
+• Built financial models for venture capital investment decisions
+• Supported partner in client relationship management
 
 EDUCATION
-Bachelor of Computer Science, University of Technology (2016-2020)
-- Studied algorithms, data structures, software engineering
-- Completed machine learning and AI coursework
-- Graduated with honors
+
+Master of Business Administration, Stanford Graduate School of Business (2017-2019)
+• Concentration in Technology and Innovation
+• Stanford Technology Ventures Program participant
+
+Bachelor of Engineering, University of Cambridge (2013-2017)
+• First Class Honours in Computer Science
+• Captain of university debate team
 
 SKILLS
-- Programming: JavaScript, Python, TypeScript, Java
-- Frameworks: React, Node.js, Express, Django
-- Tools: Git, Docker, AWS, MongoDB, PostgreSQL
-- Methodologies: Agile, Scrum, Test-Driven Development
-
-GOALS
-- Want to become a senior software architect
-- Plan to learn cloud technologies like Kubernetes
-- Aspire to lead larger development teams
-- Hope to contribute to open source projects`,
+• Strategy & Analytics: Market research, financial modeling, data analysis
+• Product Management: Roadmap planning, user research, A/B testing
+• Technical: SQL, Python, Tableau, Figma
+• Leadership: Team management, stakeholder communication, public speaking`,
           metadata: {
-            fileType: 'pdf',
+            fileType: 'txt',
             fileSize: 5000,
             extractedDate: new Date()
           }
         },
         {
-          fileName: 'journal_entry.txt',
-          content: `Career Reflection - March 2024
+          fileName: 'career_goals.txt',
+          content: `Personal Career Development Plan - 2024
 
-I've been thinking about my journey as a software engineer. Started as an intern at TechCorp, 
-where I learned the fundamentals of web development. The project I'm most proud of is the 
-customer portal we built - it served over 10,000 users and reduced support tickets by 40%.
+CURRENT REFLECTION:
+Working as a Product Manager at Meta has been incredibly rewarding. The scale of impact 
+is amazing - decisions I make affect millions of creators globally. However, I want to 
+eventually transition into founding my own company.
 
-Recently completed AWS certification and started learning Kubernetes. My goal is to become 
-a cloud architect within the next two years. I want to work on larger scale systems and 
-maybe start my own tech consultancy someday.
+SHORT-TERM GOALS (1-2 years):
+• Complete Executive MBA program at Wharton (starting Fall 2024)
+• Build network in venture capital and startup ecosystem
+• Launch side project - AI-powered content creation tool
+• Develop expertise in machine learning and AI product development
 
-Skills I've developed:
-- Leadership: Led the mobile app project team
-- Communication: Presented to stakeholders regularly  
-- Problem-solving: Debugged complex production issues
-- Analytics: Used data to optimize application performance
+LONG-TERM VISION (5+ years):
+• Found AI/ML startup focused on creator economy
+• Raise Series A funding from top-tier VCs
+• Build team of 50+ world-class engineers and product people
+• Create meaningful impact for content creators worldwide
 
-Next steps: Apply for senior developer roles, contribute to open source, and start a tech blog
-to share my learning journey.`,
+SKILLS TO DEVELOP:
+• Technical: Deepen understanding of ML/AI, learn more Python
+• Business: Fundraising, startup operations, team building
+• Leadership: Executive presence, strategic communication
+• Network: Connect with successful founders and investors
+
+INSPIRATION:
+Looking up to founders like Jensen Huang (NVIDIA), Satya Nadella (Microsoft), 
+and Sarah Friar (Nextdoor). Want to build technology that empowers creativity.`,
           metadata: {
             fileType: 'txt',
-            fileSize: 1200,
+            fileSize: 1500,
             extractedDate: new Date()
           }
         }

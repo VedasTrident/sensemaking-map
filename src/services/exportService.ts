@@ -1,4 +1,4 @@
-import { ExtractedNode, AnalysisResult } from './contentAnalyzer';
+import { ExtractedNode, AnalysisResult } from './smartContentAnalyzer';
 
 export interface FigmaCSVRow {
   id: string;

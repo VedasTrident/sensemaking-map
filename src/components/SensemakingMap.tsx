@@ -13,7 +13,7 @@ import {
   ReactFlowProvider,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { ExtractedNode } from '../services/contentAnalyzer';
+import { ExtractedNode } from '../services/smartContentAnalyzer';
 
 interface SensemakingMapProps {
   extractedNodes: ExtractedNode[];

@@ -145,24 +145,22 @@ const SensemakingMap: React.FC<SensemakingMapProps> = ({
         </ReactFlow>
       </ReactFlowProvider>
       
-      {/* Legend */}
-      <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg border">
+      {/* Legend - Moved to bottom right to avoid button overlap */}
+      <div className="absolute bottom-4 right-4 bg-white p-3 rounded-lg shadow-lg border max-w-xs">
         <h3 className="font-semibold mb-2 text-sm">Node Types</h3>
-        <div className="space-y-1 text-xs">
+        <div className="grid grid-cols-2 gap-1 text-xs">
           {Object.entries(nodeColors).map(([type, color]) => (
-            <div key={type} className="flex items-center space-x-2">
+            <div key={type} className="flex items-center space-x-1">
               <div 
-                className="w-4 h-4 rounded border border-gray-400"
+                className="w-3 h-3 rounded border border-gray-400 flex-shrink-0"
                 style={{ backgroundColor: color }}
               />
-              <span className="capitalize">{type}</span>
+              <span className="capitalize truncate">{type}</span>
             </div>
           ))}
         </div>
-        <div className="mt-3 text-xs text-gray-600">
-          <p>• Double-click nodes to edit</p>
-          <p>• Drag to rearrange</p>
-          <p>• Use controls to zoom/pan</p>
+        <div className="mt-2 text-xs text-gray-600 border-t pt-2">
+          <p>• Double-click to edit • Drag to move</p>
         </div>
       </div>
     </div>

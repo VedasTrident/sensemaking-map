@@ -35,22 +35,36 @@ export class ContentAnalyzer {
   private roleKeywords = [
     'software engineer', 'developer', 'analyst', 'consultant', 'manager', 
     'director', 'intern', 'associate', 'senior', 'lead', 'principal',
-    'ceo', 'cto', 'founder', 'co-founder', 'vp', 'head of'
+    'ceo', 'cto', 'founder', 'co-founder', 'vp', 'head of', 'coordinator',
+    'specialist', 'officer', 'executive', 'supervisor', 'administrator',
+    'researcher', 'scientist', 'engineer', 'designer', 'architect',
+    'product manager', 'project manager', 'data scientist', 'ux designer',
+    'marketing', 'sales', 'hr', 'finance', 'operations', 'strategy'
   ];
 
   private projectKeywords = [
     'project', 'built', 'developed', 'created', 'launched', 'implemented',
-    'designed', 'worked on', 'contributed to', 'led', 'managed'
+    'designed', 'worked on', 'contributed to', 'led', 'managed', 'delivered',
+    'shipped', 'deployed', 'released', 'completed', 'accomplished', 'achieved',
+    'collaborated', 'coordinated', 'facilitated', 'established', 'initiated'
   ];
 
   private educationKeywords = [
     'university', 'college', 'school', 'degree', 'bachelor', 'master',
-    'phd', 'graduate', 'undergraduate', 'mba', 'course', 'certification'
+    'phd', 'graduate', 'undergraduate', 'mba', 'course', 'certification',
+    'diploma', 'training', 'workshop', 'bootcamp', 'program', 'academy',
+    'institute', 'learning', 'studied', 'education', 'qualification'
   ];
 
   private skillKeywords = [
     'javascript', 'python', 'react', 'node', 'sql', 'aws', 'docker',
-    'kubernetes', 'git', 'agile', 'scrum', 'machine learning', 'ai'
+    'kubernetes', 'git', 'agile', 'scrum', 'machine learning', 'ai',
+    'html', 'css', 'java', 'c++', 'c#', 'go', 'rust', 'typescript',
+    'angular', 'vue', 'mongodb', 'postgresql', 'mysql', 'redis',
+    'tensorflow', 'pytorch', 'excel', 'powerpoint', 'word', 'photoshop',
+    'figma', 'sketch', 'tableau', 'powerbi', 'salesforce', 'hubspot',
+    'jira', 'confluence', 'slack', 'teams', 'zoom', 'communication',
+    'leadership', 'management', 'analytics', 'strategy', 'planning'
   ];
 
   private goalKeywords = [

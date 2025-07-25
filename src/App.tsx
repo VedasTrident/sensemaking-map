@@ -26,16 +26,35 @@ function App() {
     setError('');
 
     try {
+      console.log('Processing files:', files.map(f => f.name));
       const processed = await documentProcessor.processMultipleFiles(files);
-      setProcessedDocuments(processed);
+      console.log('Processed documents:', processed.length);
+      
+      // Merge with existing documents if any
+      const allDocuments = [...processedDocuments, ...processed];
+      setProcessedDocuments(allDocuments);
       setProcessingStatus('Analyzing content and extracting insights...');
 
-      const analysis = await contentAnalyzer.analyzeDocuments(processed);
-      setAnalysisResult(analysis);
+      if (allDocuments.length === 0) {
+        setError('No documents could be processed. Please check your files and try again.');
+        setAppState('upload');
+        return;
+      }
+
+      const analysis = await contentAnalyzer.analyzeDocuments(allDocuments);
+      console.log('Analysis result:', analysis);
       
+      if (analysis.nodes.length === 0) {
+        setError('No career insights could be extracted from your documents. Try uploading documents with more explicit career information (CVs, job descriptions, project reports, etc.).');
+        setAppState('upload');
+        return;
+      }
+      
+      setAnalysisResult(analysis);
       setAppState('mapping');
       setProcessingStatus('');
     } catch (err) {
+      console.error('Processing error:', err);
       setError(`Processing failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
       setAppState('upload');
       setProcessingStatus('');
@@ -86,6 +105,99 @@ function App() {
     setAnalysisResult(null);
     setProcessingStatus('');
     setError('');
+  };
+
+  const handleDemoData = async () => {
+    setAppState('processing');
+    setProcessingStatus('Loading demo data...');
+    setError('');
+
+    try {
+      // Create sample documents with realistic career content
+      const sampleDocuments: ProcessedDocument[] = [
+        {
+          fileName: 'resume.pdf',
+          content: `John Smith
+Software Engineer | Full Stack Developer
+
+EXPERIENCE
+Software Engineer at TechCorp (2022-2024)
+- Developed React applications using JavaScript and TypeScript
+- Built REST APIs with Node.js and Express
+- Implemented database solutions with PostgreSQL
+- Led a team of 3 developers on mobile app project
+- Deployed applications using Docker and AWS
+
+Junior Developer at StartupXYZ (2020-2022)  
+- Created responsive web applications using HTML, CSS, React
+- Worked on machine learning models with Python and TensorFlow
+- Collaborated with UX designers on user interface improvements
+- Managed project timelines using Agile methodology
+
+EDUCATION
+Bachelor of Computer Science, University of Technology (2016-2020)
+- Studied algorithms, data structures, software engineering
+- Completed machine learning and AI coursework
+- Graduated with honors
+
+SKILLS
+- Programming: JavaScript, Python, TypeScript, Java
+- Frameworks: React, Node.js, Express, Django
+- Tools: Git, Docker, AWS, MongoDB, PostgreSQL
+- Methodologies: Agile, Scrum, Test-Driven Development
+
+GOALS
+- Want to become a senior software architect
+- Plan to learn cloud technologies like Kubernetes
+- Aspire to lead larger development teams
+- Hope to contribute to open source projects`,
+          metadata: {
+            fileType: 'pdf',
+            fileSize: 5000,
+            extractedDate: new Date()
+          }
+        },
+        {
+          fileName: 'journal_entry.txt',
+          content: `Career Reflection - March 2024
+
+I've been thinking about my journey as a software engineer. Started as an intern at TechCorp, 
+where I learned the fundamentals of web development. The project I'm most proud of is the 
+customer portal we built - it served over 10,000 users and reduced support tickets by 40%.
+
+Recently completed AWS certification and started learning Kubernetes. My goal is to become 
+a cloud architect within the next two years. I want to work on larger scale systems and 
+maybe start my own tech consultancy someday.
+
+Skills I've developed:
+- Leadership: Led the mobile app project team
+- Communication: Presented to stakeholders regularly  
+- Problem-solving: Debugged complex production issues
+- Analytics: Used data to optimize application performance
+
+Next steps: Apply for senior developer roles, contribute to open source, and start a tech blog
+to share my learning journey.`,
+          metadata: {
+            fileType: 'txt',
+            fileSize: 1200,
+            extractedDate: new Date()
+          }
+        }
+      ];
+
+      setProcessedDocuments(sampleDocuments);
+      setProcessingStatus('Analyzing demo content...');
+
+      const analysis = await contentAnalyzer.analyzeDocuments(sampleDocuments);
+      setAnalysisResult(analysis);
+      setAppState('mapping');
+      setProcessingStatus('');
+    } catch (err) {
+      console.error('Demo data error:', err);
+      setError('Failed to load demo data. Please try uploading your own files.');
+      setAppState('upload');
+      setProcessingStatus('');
+    }
   };
 
   return (
@@ -160,6 +272,22 @@ function App() {
                 generate a visual timeline of your career journey, projects, and aspirations.
               </p>
             </div>
+            
+            {/* Demo Button */}
+            {processedDocuments.length === 0 && (
+              <div className="text-center mb-6">
+                <button
+                  onClick={handleDemoData}
+                  className="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 font-medium"
+                >
+                  Try Demo with Sample Data
+                </button>
+                <p className="text-sm text-gray-500 mt-2">
+                  See how the app works with example career data
+                </p>
+              </div>
+            )}
+            
             <FileUpload onFilesUploaded={handleFilesUploaded} />
           </div>
         )}
@@ -187,6 +315,13 @@ function App() {
                 </p>
               </div>
               <div className="flex space-x-3">
+                <button
+                  onClick={() => setAppState('upload')}
+                  className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center space-x-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  <span>Add More Files</span>
+                </button>
                 <button
                   onClick={() => setAppState('export')}
                   className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center space-x-2"

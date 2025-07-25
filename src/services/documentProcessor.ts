@@ -188,10 +188,22 @@ export class DocumentProcessor {
       files.map(file => this.processFile(file))
     );
 
-    return results
+    const successful = results
       .filter((result): result is PromiseFulfilledResult<ProcessedDocument> => 
         result.status === 'fulfilled'
       )
       .map(result => result.value);
+
+    const failed = results
+      .filter((result): result is PromiseRejectedResult => 
+        result.status === 'rejected'
+      );
+
+    if (failed.length > 0) {
+      console.warn(`Failed to process ${failed.length} files:`, failed.map(f => f.reason));
+    }
+
+    console.log(`Successfully processed ${successful.length} out of ${files.length} files`);
+    return successful.filter(doc => doc.content.trim().length > 0);
   }
 }

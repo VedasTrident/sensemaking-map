@@ -297,7 +297,7 @@ export class ContentAnalyzer {
       
       if (similar) {
         // Merge nodes
-        similar.sourceDocuments = [...new Set([...similar.sourceDocuments, ...node.sourceDocuments])];
+        similar.sourceDocuments = Array.from(new Set([...similar.sourceDocuments, ...node.sourceDocuments]));
         if (node.timeframe && !similar.timeframe) {
           similar.timeframe = node.timeframe;
         }
@@ -404,7 +404,7 @@ export class ContentAnalyzer {
       return acc;
     }, {} as Record<string, ExtractedNode[]>);
     
-    let yOffset = 50;
+    // let yOffset = 50; // Reserved for future use
     const typeSpacing = height / Object.keys(nodesByType).length;
     
     Object.entries(nodesByType).forEach(([type, typeNodes], typeIndex) => {

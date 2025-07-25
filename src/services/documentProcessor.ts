@@ -1,8 +1,11 @@
-import pdfParse from 'pdf-parse';
+import * as pdfjsLib from 'pdfjs-dist';
 import mammoth from 'mammoth';
 import Tesseract from 'tesseract.js';
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
+
+// Configure PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 export interface ProcessedDocument {
   fileName: string;
@@ -77,9 +80,25 @@ export class DocumentProcessor {
   }
 
   private async processPDF(file: File): Promise<string> {
-    const arrayBuffer = await file.arrayBuffer();
-    const data = await pdfParse(arrayBuffer);
-    return data.text;
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let text = '';
+      
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items
+          .map((item: any) => item.str)
+          .join(' ');
+        text += pageText + '\n';
+      }
+      
+      return text;
+    } catch (error) {
+      console.error('PDF processing failed:', error);
+      return `[PDF file: ${file.name} - Could not extract text]`;
+    }
   }
 
   private async processWord(file: File): Promise<string> {
@@ -143,7 +162,7 @@ export class DocumentProcessor {
       const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
       
       content += `Sheet: ${sheetName}\n`;
-      content += jsonData
+      content += (jsonData as any[][])
         .map((row: any[]) => row.join('\t'))
         .join('\n');
       content += '\n\n';

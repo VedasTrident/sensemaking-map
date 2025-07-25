@@ -101,7 +101,7 @@ const SensemakingMap: React.FC<SensemakingMapProps> = ({
 
   const onNodeDoubleClick = useCallback((event: React.MouseEvent, node: Node) => {
     // Enable editing on double click
-    const newLabel = prompt('Edit node label:', node.data.label);
+    const newLabel = prompt('Edit node label:', String(node.data.label || ''));
     if (newLabel && newLabel !== node.data.label) {
       setNodes((nds) =>
         nds.map((n) =>
@@ -138,7 +138,7 @@ const SensemakingMap: React.FC<SensemakingMapProps> = ({
           <Background color="#aaa" gap={16} />
           <Controls />
           <MiniMap 
-            nodeColor={(node) => nodeColors[node.data.type] || '#ddd'}
+            nodeColor={(node) => nodeColors[node.data.type as keyof typeof nodeColors] || '#ddd'}
             maskColor="rgb(240, 240, 240, 0.6)"
             position="top-left"
           />

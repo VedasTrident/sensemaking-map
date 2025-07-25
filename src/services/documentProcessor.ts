@@ -81,23 +81,64 @@ export class DocumentProcessor {
 
   private async processPDF(file: File): Promise<string> {
     try {
+      console.log(`Processing PDF: ${file.name}, size: ${file.size} bytes`);
+      
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      console.log('PDF arrayBuffer created, length:', arrayBuffer.byteLength);
+      
+      const pdf = await pdfjsLib.getDocument({ 
+        data: arrayBuffer,
+        verbosity: 0 // Reduce console noise
+      }).promise;
+      
+      console.log(`PDF loaded successfully, ${pdf.numPages} pages`);
       let text = '';
       
       for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items
-          .map((item: any) => item.str)
-          .join(' ');
-        text += pageText + '\n';
+        try {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          
+          // Better text extraction with spacing
+          const pageText = textContent.items
+            .map((item: any) => {
+              // Add proper spacing between text items
+              const str = item.str || '';
+              return str.trim();
+            })
+            .filter(str => str.length > 0)
+            .join(' ');
+          
+          console.log(`Page ${i} extracted ${pageText.length} characters`);
+          text += pageText + '\n\n';
+        } catch (pageError) {
+          console.warn(`Failed to process page ${i}:`, pageError);
+          continue;
+        }
       }
       
-      return text;
+      const finalText = text.trim();
+      console.log(`PDF processing complete. Total text length: ${finalText.length}`);
+      
+      if (finalText.length === 0) {
+        console.warn('PDF text extraction resulted in empty content');
+        return `[PDF file: ${file.name} - PDF appears to be empty or contains only images. Try converting to text first or use OCR.]`;
+      }
+      
+      return finalText;
     } catch (error) {
       console.error('PDF processing failed:', error);
-      return `[PDF file: ${file.name} - Could not extract text]`;
+      
+      // Provide more specific error messages
+      if (error instanceof Error) {
+        if (error.message.includes('Invalid PDF')) {
+          return `[PDF file: ${file.name} - Invalid PDF format. Please ensure this is a valid PDF file.]`;
+        } else if (error.message.includes('password')) {
+          return `[PDF file: ${file.name} - Password-protected PDF not supported. Please remove password protection.]`;
+        }
+      }
+      
+      return `[PDF file: ${file.name} - Could not extract text. Error: ${error instanceof Error ? error.message : 'Unknown error'}]`;
     }
   }
 

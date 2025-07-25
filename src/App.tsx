@@ -36,9 +36,24 @@ function App() {
       setProcessingStatus('Analyzing content and extracting insights...');
 
       if (allDocuments.length === 0) {
-        setError('No documents could be processed. Please check your files and try again.');
+        setError('No documents could be processed. This could happen if: 1) PDF files are image-based (try copy/pasting text instead), 2) Files are password-protected, 3) Files are corrupted. Please try uploading different files or use the demo to see how it works.');
         setAppState('upload');
         return;
+      }
+
+      // Check for processing errors in document content
+      const hasProcessingErrors = allDocuments.some(doc => 
+        doc.content.includes('[PDF file:') || 
+        doc.content.includes('Could not extract') ||
+        doc.content.includes('processing failed')
+      );
+
+      if (hasProcessingErrors) {
+        const errorDocs = allDocuments.filter(doc => 
+          doc.content.includes('[PDF file:') || 
+          doc.content.includes('Could not extract')
+        );
+        setError(`Some files couldn't be processed: ${errorDocs.map(d => d.fileName).join(', ')}. For LinkedIn profiles, try: 1) Copy text directly from LinkedIn, 2) Save as Word/Text file, or 3) Use the demo to see expected results.`);
       }
 
       const analysis = await contentAnalyzer.analyzeDocuments(allDocuments);
@@ -302,6 +317,30 @@ and Sarah Friar (Nextdoor). Want to build technology that empowers creativity.`,
             )}
             
             <FileUpload onFilesUploaded={handleFilesUploaded} />
+            
+            {/* Help Section */}
+            <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-blue-900 mb-3">💡 Tips for Best Results</h3>
+              <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-800">
+                <div>
+                  <h4 className="font-medium mb-2">📄 For LinkedIn Profiles:</h4>
+                  <ul className="space-y-1 list-disc list-inside">
+                    <li>Copy text directly from LinkedIn and save as .txt file</li>
+                    <li>Use "Print to PDF" and select text-based output</li>
+                    <li>Avoid screenshot PDFs (images can't be processed)</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">📋 Other Document Types:</h4>
+                  <ul className="space-y-1 list-disc list-inside">
+                    <li>Word documents (.docx) work great</li>
+                    <li>Plain text files (.txt) are most reliable</li>
+                    <li>CV/Resume PDFs with selectable text</li>
+                    <li>Journal entries and career notes</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 

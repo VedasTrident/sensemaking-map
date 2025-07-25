@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FileUpload from './components/FileUpload';
 import SensemakingMap from './components/SensemakingMap';
 import { DocumentProcessor, ProcessedDocument } from './services/documentProcessor';
-import { SmartContentAnalyzer, ExtractedNode, AnalysisResult } from './services/smartContentAnalyzer';
+import { SimpleContentAnalyzer, ExtractedNode, AnalysisResult } from './services/simpleContentAnalyzer';
 import { ExportService } from './services/exportService';
 import { Download, FileText, Map, Settings } from 'lucide-react';
 import './App.css';
@@ -17,7 +17,7 @@ function App() {
   const [error, setError] = useState<string>('');
 
   const documentProcessor = new DocumentProcessor();
-  const contentAnalyzer = new SmartContentAnalyzer();
+  const contentAnalyzer = new SimpleContentAnalyzer();
   const exportService = new ExportService();
 
   const handleFilesUploaded = async (files: File[]) => {
@@ -132,43 +132,30 @@ function App() {
       const sampleDocuments: ProcessedDocument[] = [
         {
           fileName: 'linkedin_profile.txt',
-          content: `Ved Shankar
-Product Manager at Meta | Former Consultant at McKinsey & Company
+          content: `John Smith
 
-EXPERIENCE
+Software Engineer at Google (2022 - Present)
+• Built machine learning models for search ranking algorithms
+• Developed React-based internal tools used by 1000+ employees
+• Led team of 5 engineers on maps infrastructure project
 
-Product Manager at Meta (2023 - Present)
-• Led product strategy for Instagram Reels monetization features
-• Collaborated with engineering teams to launch creator economy tools
-• Analyzed user engagement data to optimize content discovery algorithms
-• Managed cross-functional teams of 15+ engineers and designers
+Data Analyst at Microsoft (2020 - 2022)
+• Created dashboards analyzing user behavior for Office 365
+• Implemented data pipelines processing 10M+ daily events
+• Collaborated with product teams on feature optimization
 
-Senior Consultant at McKinsey & Company (2021 - 2023)
-• Advised Fortune 500 clients on digital transformation strategies
-• Led due diligence for $2B+ technology acquisitions
-• Developed go-to-market strategies for SaaS startups
-• Presented findings to C-suite executives and board members
+Junior Developer at Startup Inc (2018 - 2020)
+• Developed mobile app with 50K+ downloads
+• Built REST APIs using Node.js and PostgreSQL
+• Managed deployment pipeline with Docker and AWS
 
-Business Analyst at Boston Consulting Group (2019 - 2021)
-• Conducted market research and competitive analysis for tech clients
-• Built financial models for venture capital investment decisions
-• Supported partner in client relationship management
-
-EDUCATION
-
-Master of Business Administration, Stanford Graduate School of Business (2017-2019)
-• Concentration in Technology and Innovation
-• Stanford Technology Ventures Program participant
-
-Bachelor of Engineering, University of Cambridge (2013-2017)
-• First Class Honours in Computer Science
-• Captain of university debate team
+Master of Computer Science, Stanford University (2016-2018)
+Bachelor of Science in Mathematics, UC Berkeley (2012-2016)
 
 SKILLS
-• Strategy & Analytics: Market research, financial modeling, data analysis
-• Product Management: Roadmap planning, user research, A/B testing
-• Technical: SQL, Python, Tableau, Figma
-• Leadership: Team management, stakeholder communication, public speaking`,
+Programming: Python, JavaScript, Java, SQL
+Frameworks: React, Node.js, TensorFlow, Django
+Tools: AWS, Docker, Git, Tableau`,
           metadata: {
             fileType: 'txt',
             fileSize: 5000,
@@ -176,38 +163,28 @@ SKILLS
           }
         },
         {
-          fileName: 'career_goals.txt',
-          content: `Personal Career Development Plan - 2024
+          fileName: 'personal_notes.txt',
+          content: `Career Notes - March 2024
 
-CURRENT REFLECTION:
-Working as a Product Manager at Meta has been incredibly rewarding. The scale of impact 
-is amazing - decisions I make affect millions of creators globally. However, I want to 
-eventually transition into founding my own company.
+Really enjoying my role as Software Engineer at Google. The ML projects are fascinating 
+and I'm learning so much about large-scale systems. 
 
-SHORT-TERM GOALS (1-2 years):
-• Complete Executive MBA program at Wharton (starting Fall 2024)
-• Build network in venture capital and startup ecosystem
-• Launch side project - AI-powered content creation tool
-• Develop expertise in machine learning and AI product development
+The maps infrastructure project I'm leading has been challenging but rewarding. Managing 
+a team of 5 engineers while still coding myself.
 
-LONG-TERM VISION (5+ years):
-• Found AI/ML startup focused on creator economy
-• Raise Series A funding from top-tier VCs
-• Build team of 50+ world-class engineers and product people
-• Create meaningful impact for content creators worldwide
+Goals for this year:
+• Get promoted to Senior Software Engineer
+• Complete the internal ML certification program  
+• Start contributing to open source TensorFlow
+• Begin mentoring junior developers
 
-SKILLS TO DEVELOP:
-• Technical: Deepen understanding of ML/AI, learn more Python
-• Business: Fundraising, startup operations, team building
-• Leadership: Executive presence, strategic communication
-• Network: Connect with successful founders and investors
+Longer term, I'd love to become a Staff Engineer and eventually transition into 
+engineering management. The leadership aspects of my current role have been eye-opening.
 
-INSPIRATION:
-Looking up to founders like Jensen Huang (NVIDIA), Satya Nadella (Microsoft), 
-and Sarah Friar (Nextdoor). Want to build technology that empowers creativity.`,
+Also considering getting involved in hiring - I want to help build diverse teams.`,
           metadata: {
             fileType: 'txt',
-            fileSize: 1500,
+            fileSize: 800,
             extractedDate: new Date()
           }
         }

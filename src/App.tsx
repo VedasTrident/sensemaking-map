@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FileUpload from './components/FileUpload';
 import SensemakingMap from './components/SensemakingMap';
 import { DocumentProcessor, ProcessedDocument } from './services/documentProcessor';
-import { SimpleContentAnalyzer, ExtractedNode, AnalysisResult } from './services/simpleContentAnalyzer';
+import { UltraSimpleAnalyzer, ExtractedNode, AnalysisResult } from './services/ultraSimpleAnalyzer';
 import { ExportService } from './services/exportService';
 import { Download, FileText, Map, Settings } from 'lucide-react';
 import './App.css';
@@ -17,7 +17,7 @@ function App() {
   const [error, setError] = useState<string>('');
 
   const documentProcessor = new DocumentProcessor();
-  const contentAnalyzer = new SimpleContentAnalyzer();
+  const contentAnalyzer = new UltraSimpleAnalyzer();
   const exportService = new ExportService();
 
   const handleFilesUploaded = async (files: File[]) => {

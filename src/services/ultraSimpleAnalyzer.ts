@@ -145,7 +145,7 @@ export class UltraSimpleAnalyzer {
       const title = atMatch[1].trim();
       const company = atMatch[2].trim();
       
-      if (this.looksLikeJobTitle(title) && this.looksLikeCompany(company)) {
+      if (title.length > 2 && company.length > 2) {
         console.log(`   🎯 Found "at" pattern: "${title}" at "${company}"`);
         const dates = this.extractDates(line + ' ' + nextLine);
         
@@ -174,7 +174,7 @@ export class UltraSimpleAnalyzer {
       const title = pipeMatch[1].trim();
       const company = pipeMatch[2].trim();
       
-      if (this.looksLikeJobTitle(title) && this.looksLikeCompany(company)) {
+      if (title.length > 2 && company.length > 2) {
         console.log(`   🎯 Found pipe pattern: "${title}" | "${company}"`);
         const dates = this.extractDates(line + ' ' + nextLine);
         
@@ -203,7 +203,7 @@ export class UltraSimpleAnalyzer {
       const title = commaMatch[1].trim();
       const company = commaMatch[2].trim();
       
-      if (this.looksLikeJobTitle(title) && this.looksLikeCompany(company)) {
+      if (title.length > 2 && company.length > 2) {
         console.log(`   🎯 Found comma pattern: "${title}", "${company}"`);
         const dates = this.extractDates(line + ' ' + nextLine);
         

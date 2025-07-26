@@ -213,7 +213,7 @@ Also considering getting involved in hiring - I want to help build diverse teams
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
               <Map className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900">Sensemaking Map</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Sense Making Map Version 3</h1>
             </div>
             
             {/* Navigation */}
